@@ -6,7 +6,7 @@ var serialize = function(object) {
             if(object instanceof Array) { // Array
                 result += "[";
                 for(i in object) {
-                    items.push(serialize(object[i]));
+                    items.push(encodeURIComponent(serialize(object[i])));
                 }
                 result += items.join(",");
                 result += "]";
@@ -14,9 +14,9 @@ var serialize = function(object) {
             }else { // Dictonary
                 result += "{";
                 for(i in object) {
-                    items.push(i + ":" + serialize(object[i]));
+                    items.push(encodeURIComponent(i) + ":" + encodeURIComponent(serialize(object[i])));
                 }
-                result += items.join("^");
+                result += items.join(",");
                 result += "}";
             }
             break;
@@ -31,27 +31,29 @@ var serialize = function(object) {
 };
 
 var deserialize = function(serialized) {
-    var i, result, value;
+    var i, j, result = null, escapes;
     switch(serialized[0]) {
         case "[":
             result = [];
             for(i = 1; serialized[i] !== "]" && i<serialized.length; ++i) { }
+            escapes = serialized.substring(1, i).split(/,/gi);
             
-            value = serialized.substring(1, i).split(",");
-            for(i in value) {
-                result.push(value[i]);
+            for(j in escapes) {
+                result.push(deserialize(decodeURIComponent(escapes[j])));
             }
+
             return result;
 
         case "{":
             result = {};
             for(i = 1; serialized[i] !== "}" && i<serialized.length; ++i) { }
-            
-            value = serialized.substring(1, i).split("^");
-            for(i in value) {
-                var tokens = value[i].split(":");
-                result[tokens[0]] = deserialize(tokens[1]);
+            escapes = serialized.substring(1, i).split(/,/gi);
+
+            for(j in escapes) {
+                var tokens = escapes[j].split(":");
+                result[decodeURIComponent(tokens[0])] = deserialize(decodeURIComponent(tokens[1]));
             }
+
             return result;
 
         default:
