@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>JavaScript Serialize/Deserialize Demo</title>
+	<link href="../libs/css/bootstrap.min.css" rel="stylesheet">
+	<style>body { margin: 50px 0px; }</style>
+</head>
+<body>
+	<div class="container">
+		<h1>JavaScript Serialize/Deserialize Demo</h1>
+		<hr />
+		<h2>Serialize</h2>
+		<h3>Array</h3>
+		<code>var output = serialize([1, 2, 3]); // output is <span id="serialize1"></span></code>
+		<h3>Dictonary</h3>
+		<code>var output = serialize({1:1, 2:2, 3:3}); // output is <span id="serialize2"></span></code>
+		<h3>Number</h3>
+		<code>var output = serialize(100); // output is <span id="serialize3"></span></code>
+		<h3>String</h3>
+		<code>var output = serialize("test"); // output is <span id="serialize4"></span></code>
+		<h2>Deserialize</h2>
+	    <h3>Array</h3>
+		<code>var output = deserialize("[1, 2, 3]"); // output is <span id="deserialize1"></span></code>
+		<h3>Dictonary</h3>
+		<code>var output = deserialize("{1:1^2:2^3:3}"); // output is <span id="deserialize2"></span></code>
+		<h3>Number</h3>
+		<code>var output = serialize(100); // output is <span id="deserialize3"></span></code>
+		<h3>String</h3>
+		<code>var output = serialize("test"); // output is <span id="deserialize4"></span></code>
+		<script type="text/javascript" src="../libs/js/jquery-1.11.0.min.js"></script>
+		<script type="text/javascript" src="../src/serialize.js"></script>
+		<script>
+		    $("#serialize1").html(serialize([1, 2, 3]));
+		    $("#serialize2").html(serialize({1:1, 2:2, 3:3}));
+		    $("#serialize3").html(serialize(100));
+		    $("#serialize4").html(serialize("test"));
+		    
+		    $("#deserialize1").html(deserialize("[1, 2, 3]"));
+		    $("#deserialize2").html(deserialize("{1:1^2:2^3:3}"));
+		    $("#deserialize3").html(deserialize(100));
+		    $("#deserialize4").html(deserialize("test"));		    
+		</script>
+	</div>
+</body>
+
