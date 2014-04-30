@@ -1,11 +1,11 @@
 var serialize = function(object) {
-    var result = "";
+    var result = "", i;
     switch(typeof(object)) {
         case "object":
             var items = [];
             if(object instanceof Array) { // Array
                 result += "[";
-                for(var i in object) {
+                for(i in object) {
                     items.push(serialize(object[i]));
                 }
                 result += items.join(",");
@@ -13,7 +13,7 @@ var serialize = function(object) {
 
             }else { // Dictonary
                 result += "{";
-                for(var i in object) {
+                for(i in object) {
                     items.push(i + ":" + serialize(object[i]));
                 }
                 result += items.join("^");
@@ -31,21 +31,24 @@ var serialize = function(object) {
 };
 
 var deserialize = function(serialized) {
+    var i, result, value;
     switch(serialized[0]) {
         case "[":
-            var result = [], i=1;
-            for(; serialized[i] !== "]" && i<serialized.length; ++i) { }
-            var value = serialized.substring(1, i).split(",");
-            for(var i in value) {
+            result = [];
+            for(i = 1; serialized[i] !== "]" && i<serialized.length; ++i) { }
+            
+            value = serialized.substring(1, i).split(",");
+            for(i in value) {
                 result.push(value[i]);
             }
             return result;
 
         case "{":
-            var result = {}, i=1;
-            for(; serialized[i] !== "}" && i<serialized.length; ++i) { }
-            var value = serialized.substring(1, i).split("^");
-            for(var i in value) {
+            result = {};
+            for(i = 1; serialized[i] !== "}" && i<serialized.length; ++i) { }
+            
+            value = serialized.substring(1, i).split("^");
+            for(i in value) {
                 var tokens = value[i].split(":");
                 result[tokens[0]] = deserialize(tokens[1]);
             }
