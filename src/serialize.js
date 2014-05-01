@@ -1,63 +1,85 @@
-var serialize = function(object) {
-    var result = "", i;
-    switch(typeof(object)) {
-        case "object":
-            var items = [];
-            if(object instanceof Array) { // Array
-                result += "[";
-                for(i in object) {
-                    items.push(encodeURIComponent(serialize(object[i])));
-                }
-                result += items.join(",");
-                result += "]";
+var deserialize, serialize;
 
-            }else { // Dictonary
-                result += "{";
-                for(i in object) {
-                    items.push(encodeURIComponent(i) + ":" + encodeURIComponent(serialize(object[i])));
-                }
-                result += items.join(",");
-                result += "}";
-            }
-            break;
-
-        default:
-        case "string":
-            result += object;
-            break;
+serialize = function(object) {
+  var number_type, object_type, result, string_type;
+  result = "";
+  object_type = function(data) {
+    var items, k, v, _i, _len;
+    items = [];
+    if (data instanceof Array) {
+      for (_i = 0, _len = data.length; _i < _len; _i++) {
+        v = data[_i];
+        items.push(encodeURIComponent(serialize(v)));
+      }
+      return result += "[" + items.join(",") + "]";
+    } else {
+      for (k in data) {
+        v = data[k];
+        items.push(encodeURIComponent(k) + ":" + encodeURIComponent(serialize(v)));
+      }
+      return result += "{" + items.join(",") + "}";
     }
-
-    return result;
+  };
+  string_type = function(data) {
+    return result + data;
+  };
+  number_type = function(data) {
+    return data;
+  };
+  switch (typeof object) {
+    case "object":
+      result += object_type(object);
+      break;
+    case "string":
+      result += string_type(object);
+      break;
+    case "number":
+      result += number_type(object);
+      break;
+    default:
+      result += string_type(object);
+  }
+  return result;
 };
 
-var deserialize = function(serialized) {
-    var i, j, result = null, escapes;
-    switch(serialized[0]) {
-        case "[":
-            result = [];
-            for(i = 1; serialized[i] !== "]" && i<serialized.length; ++i) { }
-            escapes = serialized.substring(1, i).split(/,/gi);
-            
-            for(j in escapes) {
-                result.push(deserialize(decodeURIComponent(escapes[j])));
-            }
-
-            return result;
-
-        case "{":
-            result = {};
-            for(i = 1; serialized[i] !== "}" && i<serialized.length; ++i) { }
-            escapes = serialized.substring(1, i).split(/,/gi);
-
-            for(j in escapes) {
-                var tokens = escapes[j].split(":");
-                result[decodeURIComponent(tokens[0])] = deserialize(decodeURIComponent(tokens[1]));
-            }
-
-            return result;
-
-        default:
-            return serialized;
+deserialize = function(object) {
+  var array_type, dict_type, result;
+  result = "";
+  array_type = function(data) {
+    var end, escapes, items, v, _i, _len;
+    items = [];
+    end = 0;
+    while (++end < data.length && data[end] !== "]") {
+      continue;
     }
+    escapes = data.substring(1, end).split(/,/gi);
+    for (_i = 0, _len = escapes.length; _i < _len; _i++) {
+      v = escapes[_i];
+      items.push(deserialize(decodeURIComponent(v)));
+    }
+    return items;
+  };
+  dict_type = function(data) {
+    var end, escapes, items, token, v, _i, _len;
+    items = {};
+    end = 0;
+    while (++end < data.length && data[end] !== "}") {
+      continue;
+    }
+    escapes = data.substring(1, end).split(/,/gi);
+    for (_i = 0, _len = escapes.length; _i < _len; _i++) {
+      v = escapes[_i];
+      token = v.split(":");
+      items[decodeURIComponent(token[0])] = deserialize(decodeURIComponent(token[1]));
+    }
+    return items;
+  };
+  switch (object[0]) {
+    case "[":
+      return array_type(object);
+    case "{":
+      return dict_type(object);
+    default:
+      return object;
+  }
 };
-

@@ -1,20 +1,21 @@
 {
-  "name": "serialize",
-  "version": "1.0.1",
-  "engines": {
-    "node": ">= 0.8.0"
-  },
-  "scripts": {
-    "test": "grunt travis --verbose"
-  },
-  "devDependencies": {
-    "grunt-contrib-jshint": "~0.7.2",
-    "grunt-contrib-uglify": "~0.2.7",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt": "~0.4.2",
-    "grunt-shell": "~0.6.1",
-    "coveralls": "~2.5.0",
-    "grunt-contrib-watch": "~0.5.3",
-    "grunt-qunit-istanbul": "~0.3.0"
-  }
+    "name": "serialize",
+    "version": "1.0.1",
+    "engines": {
+        "node": ">= 0.8.0"
+    },
+    "scripts": {
+        "test": "grunt travis --verbose"
+    },
+    "devDependencies": {
+        "coveralls": "~2.5.0",
+        "grunt": "~0.4.2",
+        "grunt-contrib-clean": "~0.5.0",
+        "grunt-contrib-coffee": "^0.10.1",
+        "grunt-contrib-jshint": "~0.7.2",
+        "grunt-contrib-uglify": "~0.2.7",
+        "grunt-contrib-watch": "~0.5.3",
+        "grunt-qunit-istanbul": "~0.3.0",
+        "grunt-shell": "~0.6.1"
+    }
 }
