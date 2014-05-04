@@ -18,15 +18,19 @@
 		<code>var output = serialize(100); // output is <span id="serialize3"></span></code>
 		<h3>String</h3>
 		<code>var output = serialize("test"); // output is <span id="serialize4"></span></code>
+		<h3>Function</h3>
+		<code>var output = serialize(function() { console.log("output"); }); // output is <span id="serialize5"></span></code>
 		<h2>Deserialize</h2>
 	    <h3>Array</h3>
 		<code>var output = deserialize("[1, 2, 3]"); // output is <span id="deserialize1"></span></code>
 		<h3>Dictonary</h3>
 		<code>var output = deserialize("{1:1^2:2^3:3}"); // output is <span id="deserialize2"></span></code>
 		<h3>Number</h3>
-		<code>var output = serialize(100); // output is <span id="deserialize3"></span></code>
+		<code>var output = deserialize(100); // output is <span id="deserialize3"></span></code>
 		<h3>String</h3>
-		<code>var output = serialize("test"); // output is <span id="deserialize4"></span></code>
+		<code>var output = deserialize("test"); // output is <span id="deserialize4"></span></code>
+		<h3>Function</h3>
+		<code>var output = deserialize("{{function%20()%20%7B%20console.log(%22output%22)%3B%20%7D}}"); // output is <span id="deserialize5"></span></code>		
 		<script type="text/javascript" src="../libs/js/jquery-1.11.0.min.js"></script>
 		<script type="text/javascript" src="../src/serialize.js"></script>
 		<script>
@@ -34,11 +38,13 @@
 		    $("#serialize2").html(serialize({1:1, 2:2, 3:3}));
 		    $("#serialize3").html(serialize(100));
 		    $("#serialize4").html(serialize("test"));
-		    
+		    $("#serialize5").html(serialize(function() { console.log("output"); }));
+
 		    $("#deserialize1").html(deserialize("[1, 2, 3]"));
 		    $("#deserialize2").html(deserialize("{1:1^2:2^3:3}"));
 		    $("#deserialize3").html(deserialize(100));
-		    $("#deserialize4").html(deserialize("test"));		    
+		    $("#deserialize4").html(deserialize("test"));
+		    $("#deserialize5").html(deserialize("{{function%20()%20%7B%20console.log(%22output%22)%3B%20%7D}}"));		    
 		</script>
 	</div>
 </body>

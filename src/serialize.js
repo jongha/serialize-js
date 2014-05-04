@@ -12,6 +12,8 @@ serialize = function(object) {
         items.push(encodeURIComponent(serialize(v)));
       }
       return result += "[" + items.join(",") + "]";
+    } else if (data instanceof Function) {
+      return result += "{{" + encodeURIComponent(data.toString()) + "}}";
     } else {
       for (k in data) {
         v = data[k];
@@ -36,6 +38,9 @@ serialize = function(object) {
     case "number":
       result += number_type(object);
       break;
+    case "function":
+      result += object_type(object);
+      break;
     default:
       result += string_type(object);
   }
@@ -43,7 +48,7 @@ serialize = function(object) {
 };
 
 deserialize = function(object) {
-  var array_type, dict_type, result;
+  var array_type, dict_type, function_type, result;
   result = "";
   array_type = function(data) {
     var end, escapes, items, v, _i, _len;
@@ -74,11 +79,26 @@ deserialize = function(object) {
     }
     return items;
   };
+  function_type = function(data) {
+    var end, items;
+    items = {};
+    end = 0;
+    while (++end < data.length && data[end - 1] !== "}" && data[end] !== "}") {
+      continue;
+    }
+    return decodeURIComponent(data.substring(2, end));
+  };
   switch (object[0]) {
     case "[":
       return array_type(object);
     case "{":
-      return dict_type(object);
+      switch (object[1]) {
+        case "{":
+          return function_type(object);
+        default:
+          return dict_type(object);
+      }
+      break;
     default:
       return object;
   }

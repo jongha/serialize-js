@@ -14,6 +14,7 @@
         deepEqual(serialize(100), "100", "Number Serialize Test");
         deepEqual(serialize("test"), "test", "String Serialize Test");
         deepEqual(serialize("The quick brown fox jumps over the lazy dog"), "The quick brown fox jumps over the lazy dog", "Pangrams Serialize Test");
+        deepEqual(serialize(function () { "output"; }), "{{function%20()%20%7B%20%22output%22%3B%20%7D}}", "Function Serialize Test");
     });
 
     test("Deserialize Test", function() {
@@ -31,6 +32,7 @@
         deepEqual(deserialize(100), 100, "Number Deserialize Test");
         deepEqual(deserialize("test"), "test", "String Deserialize Test");
         deepEqual(deserialize("The quick brown fox jumps over the lazy dog"), "The quick brown fox jumps over the lazy dog", "Pangrams Deserialize Test");
+        deepEqual(deserialize("{{function%20()%20%7B%20%22output%22%3B%20%7D}}"), 'function () { "output"; }', "Function Deserialize Test");
     });
 }(jQuery));
 
